@@ -18,6 +18,27 @@ const fetchWeather = (lat, lng, callback) => {
   );
 };
 
+const fetchWeatherPromise = (lat, lng) => {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        url: `https://api.darksky.net/forecast/31549a4e1da8dfad96ec438465ceab6c/${lat},${lng}`,
+        json: true
+      },
+      (error, response, body) => {
+        if (error) {
+          reject("Unable to connect");
+        } else if (body.code || response.statusCode !== 200) {
+          reject("Invalid Location / Server Error");
+        } else {
+          resolve(body.currently);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
-  fetchWeather
+  fetchWeather,
+  fetchWeatherPromise
 };

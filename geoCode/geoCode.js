@@ -49,6 +49,35 @@ const geoCodeAddress = (address, callback) => {
   );
 };
 
+const geoCodeAddressPromise = address => {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        url: `http://www.mapquestapi.com/geocoding/v1/address?key=MyMXoKpbZrD89VJG3YaieSGYX5KUAS0P&location=${encodeURIComponent(
+          address
+        )}`,
+        json: true
+      },
+      (error, response, body) => {
+        if (error) {
+          reject("Unable to connect");
+        } else if (response.statusCode !== 200 || body.info.statuscode !== 0) {
+          reject("Invalid address");
+        } else {
+          const responseAddress = body.results[0].locations[0];
+          const { lat, lng } = responseAddress.latLng;
+          resolve({
+            Address: generateAddress(responseAddress),
+            lat,
+            lng
+          });
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
-  geoCodeAddress
+  geoCodeAddress,
+  geoCodeAddressPromise
 };
