@@ -1,0 +1,23 @@
+const request = require("request");
+
+const fetchWeather = (lat, lng, callback) => {
+  request(
+    {
+      url: `https://api.darksky.net/forecast/31549a4e1da8dfad96ec438465ceab6c/${lat},${lng}`,
+      json: true
+    },
+    (error, response, body) => {
+      if (error) {
+        callback("Unable to connect", undefined);
+      } else if (body.code || response.statusCode !== 200) {
+        callback("Invalid Location / Server Error", undefined);
+      } else {
+        callback(undefined, body.currently);
+      }
+    }
+  );
+};
+
+module.exports = {
+  fetchWeather
+};
