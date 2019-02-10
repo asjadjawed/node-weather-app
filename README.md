@@ -1,6 +1,6 @@
-# Node Note App
+# Node Weather App
 
-A simple note taking app running on node. Stores the notes using Node fs API in JSON format. User input is via command line arguments. Command line argument parsing and documentation generated via yargs package.
+A command line smart node weather app. It uses MapQuest Geo Code API to parse addresses (acceptable inputs: full address, zip codes, city names, famous locations, latitude & longitude). It then references Forecast Dark Sky API to fetch current weather for that location.
 
 Download to use.
 
@@ -11,5 +11,7 @@ To get started type:
 Built using:
 
 - Node.js
-- JSON
 - yargs
+- request
+- mapquest API
+- darksky API
