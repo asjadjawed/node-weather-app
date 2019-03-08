@@ -34,7 +34,7 @@ const geoCodeAddress = (address, callback) => {
       if (error || response.statusCode !== 200) {
         callback("Unable to connect", undefined);
       } else if (body.info.statuscode !== 0) {
-        callback("Invalid Address", undefined);
+        callback("Invalid Address: Failed to Parse", undefined);
       } else {
         const responseAddress = body.results[0].locations[0];
         const { lat, lng } = responseAddress.latLng;

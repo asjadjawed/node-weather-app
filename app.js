@@ -1,7 +1,10 @@
 const yargs = require("yargs");
 
-const geoCode = require("./geoCode/geoCode");
-const weather = require("./weather/weather");
+const geoCode = require("./utils/geoCode");
+const weather = require("./utils/weather");
+
+yargs.version("1.0.0");
+yargs.usage("Node Weather App\napp.js -a address");
 
 const argv = yargs
   .options({
@@ -31,11 +34,37 @@ const argv = yargs
 // });
 
 // Implemented via promise
-geoCode
-  .geoCodeAddressPromise(argv.address)
-  .then(address => {
-    console.log(JSON.stringify(address, null, 2));
-    return weather.fetchWeatherPromise(address.lat, address.lng);
-  })
-  .then(weather => console.log(JSON.stringify(weather, null, 2)))
-  .catch(error => console.error(error));
+
+// geoCode
+//   .geoCodeAddressPromise(argv.address)
+//   .then(address => {
+//     console.log(JSON.stringify(address, null, 2));
+//     return weather.fetchWeatherPromise(address.lat, address.lng);
+//   })
+//   .then(weather => console.log(JSON.stringify(weather, null, 2)))
+//   .catch(error => console.error(error));
+
+// Implemented via Async / Await
+
+async function getData(address) {
+  try {
+    let parsedAddress = await geoCode.geoCodeAddressPromise(address);
+    let fetchedWeather = await weather.fetchWeatherPromise(
+      parsedAddress.lat,
+      parsedAddress.lng
+    );
+
+    return { address: parsedAddress, weather: fetchedWeather };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// IIAFE - as an example if we want to later invoke an async function
+
+(async () => {
+  let result = await getData(argv.address);
+  if (result) {
+    console.log(JSON.stringify(result, null, 2));
+  }
+})();
